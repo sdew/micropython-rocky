@@ -1,6 +1,6 @@
 # Select the board to build for: if not given on the command line,
 # then default to PYBV10.
-BOARD ?= imxrtevk105x
+BOARD ?= omvrt1
 ifeq ($(wildcard boards/$(BOARD)/.),)
 $(error Invalid BOARD specified)
 endif
@@ -111,6 +111,68 @@ SRC_LIB = $(addprefix lib/,\
 	timeutils/timeutils.c \
 	utils/pyexec.c \
 	utils/interrupt_char.c \
+	cmsis/dsp/CommonTables/arm_common_tables.c \
+	cmsis/dsp/CommonTables/arm_const_structs.c \
+	cmsis/dsp/FastMathFunctions/arm_cos_f32.c  \
+	cmsis/dsp/FastMathFunctions/arm_cos_q15.c  \
+	cmsis/dsp/FastMathFunctions/arm_cos_q31.c  \
+	cmsis/dsp/FastMathFunctions/arm_sin_f32.c  \
+	cmsis/dsp/FastMathFunctions/arm_sin_q15.c  \
+	cmsis/dsp/FastMathFunctions/arm_sin_q31.c  \
+	cmsis/dsp/FastMathFunctions/arm_sqrt_q15.c  \
+	cmsis/dsp/FastMathFunctions/arm_sqrt_q31.c \
+	cmsis/dsp/MatrixFunctions/arm_mat_add_f32.c         \
+	cmsis/dsp/MatrixFunctions/arm_mat_cmplx_mult_q15.c  \
+	cmsis/dsp/MatrixFunctions/arm_mat_init_q31.c     \
+	cmsis/dsp/MatrixFunctions/arm_mat_mult_fast_q15.c  \
+	cmsis/dsp/MatrixFunctions/arm_mat_scale_f32.c  \
+	cmsis/dsp/MatrixFunctions/arm_mat_sub_q15.c    \
+	cmsis/dsp/MatrixFunctions/arm_mat_trans_q31.c \
+	cmsis/dsp/MatrixFunctions/arm_mat_add_q15.c         \
+	cmsis/dsp/MatrixFunctions/arm_mat_cmplx_mult_q31.c  \
+	cmsis/dsp/MatrixFunctions/arm_mat_inverse_f32.c  \
+	cmsis/dsp/MatrixFunctions/arm_mat_mult_fast_q31.c  \
+	cmsis/dsp/MatrixFunctions/arm_mat_scale_q15.c  \
+	cmsis/dsp/MatrixFunctions/arm_mat_sub_q31.c \
+	cmsis/dsp/MatrixFunctions/arm_mat_add_q31.c         \
+	cmsis/dsp/MatrixFunctions/arm_mat_init_f32.c        \
+	cmsis/dsp/MatrixFunctions/arm_mat_inverse_f64.c  \
+	cmsis/dsp/MatrixFunctions/arm_mat_mult_q15.c       \
+	cmsis/dsp/MatrixFunctions/arm_mat_scale_q31.c  \
+	cmsis/dsp/MatrixFunctions/arm_mat_trans_f32.c \
+	cmsis/dsp/MatrixFunctions/arm_mat_cmplx_mult_f32.c  \
+	cmsis/dsp/MatrixFunctions/arm_mat_init_q15.c        \
+	cmsis/dsp/MatrixFunctions/arm_mat_mult_f32.c     \
+	cmsis/dsp/MatrixFunctions/arm_mat_mult_q31.c       \
+	cmsis/dsp/MatrixFunctions/arm_mat_sub_f32.c    \
+	cmsis/dsp/MatrixFunctions/arm_mat_trans_q15.c \
+	cmsis/nn/ActivationFunctions/arm_nn_activations_q15.c  \
+	cmsis/nn/ActivationFunctions/arm_nn_activations_q7.c  \
+	cmsis/nn/ActivationFunctions/arm_relu_q15.c  \
+	cmsis/nn/ActivationFunctions/arm_relu_q7.c \
+	cmsis/nn/ConvolutionFunctions/arm_convolve_1x1_HWC_q7_fast_nonsquare.c  \
+	cmsis/nn/ConvolutionFunctions/arm_convolve_HWC_q7_fast.c             \
+	cmsis/nn/ConvolutionFunctions/arm_depthwise_separable_conv_HWC_q7_nonsquare.c \
+	cmsis/nn/ConvolutionFunctions/arm_convolve_HWC_q15_basic.c              \
+	cmsis/nn/ConvolutionFunctions/arm_convolve_HWC_q7_fast_nonsquare.c   \
+	cmsis/nn/ConvolutionFunctions/arm_nn_mat_mult_kernel_q7_q15.c \
+	cmsis/nn/ConvolutionFunctions/arm_convolve_HWC_q15_fast.c               \
+	cmsis/nn/ConvolutionFunctions/arm_convolve_HWC_q7_RGB.c              \
+	cmsis/nn/ConvolutionFunctions/arm_nn_mat_mult_kernel_q7_q15_reordered.c \
+	cmsis/nn/ConvolutionFunctions/arm_convolve_HWC_q7_basic.c               \
+	cmsis/nn/ConvolutionFunctions/arm_depthwise_separable_conv_HWC_q7.c \
+	cmsis/nn/FullyConnectedFunctions/arm_fully_connected_mat_q7_vec_q15.c      \
+	cmsis/nn/FullyConnectedFunctions/arm_fully_connected_q15.c      \
+	cmsis/nn/FullyConnectedFunctions/arm_fully_connected_q7.c \
+	cmsis/nn/FullyConnectedFunctions/arm_fully_connected_mat_q7_vec_q15_opt.c  \
+	cmsis/nn/FullyConnectedFunctions/arm_fully_connected_q15_opt.c  \
+	cmsis/nn/FullyConnectedFunctions/arm_fully_connected_q7_opt.c \
+	cmsis/nn/NNSupportFunctions/arm_nntables.c  \
+	cmsis/nn/NNSupportFunctions/arm_q7_to_q15_no_shift.c  \
+	cmsis/nn/NNSupportFunctions/arm_q7_to_q15_reordered_no_shift.c \
+	cmsis/nn/PoolingFunctions/arm_pool_q7_HWC.c \
+	cmsis/nn/SoftmaxFunctions/arm_softmax_q15.c  \
+	cmsis/nn/SoftmaxFunctions/arm_softmax_q7.c \
 	)
 
 ifeq ($(MICROPY_FLOAT_IMPL),double)
@@ -205,6 +267,7 @@ SRC_OMV = $(addprefix omv/,  \
 	mutex.c \
 	xalloc.c \
 	ov7725.c \
+	mt9v034.c \
 	sensor.c \
 	xalloc.c  \
 	usbdbg.c  \
@@ -276,12 +339,13 @@ SRC_IMG = $(addprefix omv/img/,   \
 	hog.c                   \
 	lenet.c                 \
 	lenet_model_num.c       \
+	draw.c \
    )
 
-SRCS_NN = $(addprefix omv/nn/,    \
+SRC_NN = $(addprefix omv/nn/,    \
 	nn.c                    \
    )
-
+   
 SRC_PY = $(addprefix omv/py/, \
 	py_helper.c             \
 	py_omv.c                \

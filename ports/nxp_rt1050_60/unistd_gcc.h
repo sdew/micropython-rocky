@@ -13,6 +13,7 @@ extern "C" {
 #include <sys/_types.h>
 #include <stddef.h>
 
+#define _EXFUN(a, b) a b
 extern char **environ;
 
 void	_EXFUN(_exit, (int __status ) _ATTRIBUTE ((__noreturn__)));
